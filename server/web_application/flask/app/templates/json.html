@@ -1,0 +1,70 @@
+{% extends "index_2.html" %}
+{% block body %}
+
+
+
+
+
+<div class="container">
+  <form>
+    <div class="form-group">
+      <label for="sel1">select frequency</label>
+      <select class="form-control" id="sel1"">
+        <option value="hourly">hourly</option>
+        <option value="all">all</option>
+        <option value="now">now</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="date1">date from:</label>
+      <input type="date" class="form-control" id="date1">
+    </div>
+    <div class="form-group">
+      <label for="date2">date till:</label>
+      <input type="date" class="form-control" id="date2">
+    </div>
+    <button type="button" onclick="myFunction()" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+
+
+
+
+
+
+  <script>
+      // document.getElementById("myForm").addEventListener("submit", myFunction);
+    function myFunction(){
+        var freq = document.getElementById("sel1").value;
+        date1 = document.getElementById("date1").value;
+        date2 = document.getElementById("date2").value;
+        date_from = date1.split("-");
+        var year = date_from[0].slice(-2);
+        var month = date_from[1];
+        var day = date_from[2];
+        date_till = date2.split("-");
+        var year2 = date_till[0].slice(-2);
+        var month2 = date_till[1];
+        var day2 = date_till[2];
+
+        if(freq == 'now'){
+          var link = "{{url}}_json"
+        }else if(year2 == 0){
+          var link = "{{url}}_json?date="+year+month+day+"&freq="+freq;
+        }else{
+          var link = "{{url}}_json?date="+year+month+day+":"+year2+month2+day2+"&freq="+freq;
+        }
+
+        console.log(link);
+        window.location.assign(link);
+
+
+      }
+  </script>
+
+
+
+
+
+{% endblock %}

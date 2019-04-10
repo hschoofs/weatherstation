@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <!-- <link rel="stylesheet" href="../static/css/bootstrap.min.css"> -->
+      <link rel="shortcut icon" href="../static/wi-day-cloudy.ico">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <!-- <script src="../static/js/jquery-3.3.1.js"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+
+  <title>weatherstation</title>
+
+</head>
+
+<body class="body">
+
+  <nav class="navbar bg-dark navbar-dark">
+    <a class="navbar-brand" href="/home">
+      <img src="../static/icons/wi-day-cloudy.svg" style="width:40px"></img>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+              <ul class="navbar-nav">
+                <li class="nav-item {{navtemp}}">
+                  <a class="nav-link" href="/temperature">TEMPERATURE</a>
+                </li>
+                <li class="nav-item {{navhum}}">
+                  <a class="nav-link" href="/humidity">HUMIDITY</a>
+                </li>
+                <li class="nav-item {{navws}}">
+                  <a class="nav-link" href="/windspeed">WINDSPEED</a>
+                </li>
+                <li class="nav-item {{navap}}">
+                  <a class="nav-link" href="/air_pressure">AIR PRESSURE</a>
+                </li>
+                <li class="nav-item {{navghi}}">
+                  <a class="nav-link" href="/irradiance_ghi">IRRADIANCE (GHI)</a>
+                </li>
+                <li class="nav-item {{navpar}}">
+                  <a class="nav-link" href="/irradiance_par">IRRADIANCE (PAR)</a>
+                </li>
+                <li class="nav-item {{navsm}}">
+                  <a class="nav-link" href="/soil_moisture">SOIL MOISTURE</a>
+                </li>
+                <li class="nav-item {{navst}}">
+                  <a class="nav-link" href="/soil_tempblue">SOIL TEMPERATURE</a>
+                </li>
+                <li class="nav-item {{navpre}}">
+                  <a class="nav-link" href="/precipitation">PRECIPITATION</a>
+                </li>
+                <li class="nav-item {{navjsn}}">
+                  <a class="nav-link" href="/json">JSON DATA</a>
+                </li>
+              </ul>
+            </div>
+  </nav>
+
+
+  <br>
+
+
+    {% block body %}
+		{% endblock %}
+
+
+
+</body>
+
+
+
+</html>

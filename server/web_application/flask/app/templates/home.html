@@ -1,0 +1,94 @@
+{% extends "index_2.html" %}
+{% block body %}
+
+<body>
+
+
+  <script>var url = '{{liveurl}}'</script>
+  <script src="static/js/get_data_home.js"></script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/temperature">
+        <img src="../static/icons/wi-thermometer.svg" class="float-right" alt="thermometer" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="air_temperature">temperature</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/humidity">
+        <img src="../static/icons/wi-humidity.svg" class="float-right" alt="humidity" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="air_relhumidity">humidity</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/windspeed">
+        <img src="../static/icons/wi-strong-wind.svg" class="float-right" alt="wind_speed" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="wind_speed">wind speed</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light"><p><img src="../static/icons/wi-small-craft-advisory.svg" class="float-right" alt="wind_direction" style="width:30px"></p></div>
+    <div class="col-10 bg-light"><p id="wind_direction">wind direction</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/air_pressure">
+        <img src="../static/icons/wi-barometer.svg" class="float-right" alt="air_pressure" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="air_pressure">air pressure</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/irradiance_ghi">
+        <img src="../static/icons/wi-hot.svg" class="float-right" alt="smp10" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="smp10">smp10</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/irradiance_par">
+        <img src="../static/icons/wi-hot.svg" class="float-right" alt="pqsl" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="pqsl">pqsl</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/soil_moisture">
+        <img src="../static/icons/wi-raindrops.svg" class="float-right" alt="soil_moisture" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="soil_moisture">soil moisture</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/soil_tempblue">
+        <img src="../static/icons/wi-thermometer-internal.svg" class="float-right" alt="soil_tempblue" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="soil_tempblue">soil temperature</p></div>
+  </div>
+  <div class="row">
+    <div class="col-2 bg-light">
+      <a href="/precipitation">
+        <img src="../static/icons/wi-rain.svg" class="float-right" alt="precipitation" style="width:30px">
+      </a>
+    </div>
+    <div class="col-10 bg-light"><p id="precipitation">precipitation</p></div>
+  </div>
+</div>
+
+
+</body>
+
+
+
+{% endblock %}

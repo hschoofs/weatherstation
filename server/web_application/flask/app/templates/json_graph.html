@@ -1,0 +1,130 @@
+{% extends "index_2.html" %}
+{% block body %}
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<body>
+<p id="id2"></p>
+
+
+<script>
+  var chart;
+  var array1 = new Array();
+  var lastval = [];
+
+
+  function requestData() {
+    $.ajax({
+        url: '{{url}}',
+        success: function(data) {
+
+             array1 = data;
+             for(i = 0;i<array1.length;i++){
+               // console.log(array1[i])
+               chart.series[0].addPoint(array1[i])
+            }
+
+            if(array1[0] == undefined){
+              // console.log('inside if cond.')
+              // alert("database error")
+              window.location.href = "{{urlfix}}_error"
+
+            }
+            else{
+                requestliveData();
+                // console.log('else')
+            }
+
+        }
+        // cache: false;
+    });
+}
+
+
+
+
+function requestliveData() {
+  $.ajax({
+      url: '{{liveurl}}',
+      success: function(point) {
+
+          var series = chart.series[0],
+              shift = series.data.length > 30; // shift if the series is
+
+          chart.series[0].addPoint(point, true, shift);
+
+          // text = ("{{title}}"+": "+ point[1]+"{{var}}")
+          // document.getElementById("id2").innerText = (text);
+
+          if (point[0] != lastval[0] && point[1] != lastval[1]){
+            // console.log("if condition");
+            setTimeout(requestliveData, 20000);
+            lastval = point;
+          }
+          else{
+            console.log("stop")
+          }
+
+      },
+      cache: false
+  });
+}
+
+
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+
+      requestData()
+
+      chart = Highcharts.chart('container', {
+          chart: {
+              type: 'spline',
+              // events: {
+              //     load: requestData
+              // }
+          },
+          title: {
+              text: '{{title}}'
+          },
+          xAxis: {
+              type: 'datetime',
+              // dateTimeLableFormats : {
+              //   '%Y-%m-%d %H:%M:%S'
+              // }
+
+              tickPixelInterval: 150,
+              // maxZoom: 20 * 1000
+
+          },
+          yAxis: {
+              {{chart}}
+              // minPadding: 10,
+              // maxPadding: 20,
+              // min: 0,
+              title: {
+                  text: '{{var}}',
+                  // margin: 80
+              }
+          },
+          series: [{
+              name: '{{title}} in  {{var}}',
+              data: []
+
+          }]
+      });
+  });
+
+
+
+</script>
+
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+</body>
+
+{% endblock %}
