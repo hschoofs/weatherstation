@@ -101,7 +101,7 @@ def channel():
 
     col = "wind_speed, wind_direction, air_temperature, air_relhumidity, smp10, pqsl, soil_moisture, soil_tempblue, soil_tempred, air_pressure, precipitation, created_at"          #collumns in database
     val = str(data)[1:-1]           ##convert list to string and remove brackets
-    logging.info(val)
+    #logging.info(val)
     insert_values(col, val)         ##insert values into database
     timer += 1                      ##counter for synchronizing time
 
@@ -109,11 +109,11 @@ def channel():
 while True:
     try:
         channel()
-        if timer == 8600:               ##sync time every 8600 iterations ~ 24 hours
+        if timer == 8640:               ##sync time every 8640 iterations ~ 24 hours
             sync_time()
             timer = 0
     except:
         logging.info("error funct. channel")
         time.sleep(50)                  ##sleep if data cannot be read from datalogger
     finally:
-        time.sleep(10)
+        time.sleep(10)					##sleep for 10 seconds
