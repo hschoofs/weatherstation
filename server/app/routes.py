@@ -1,30 +1,29 @@
-from flask import render_template, jsonify, request
-from app import app
+from flask import Flask, render_template, jsonify, request
 import psycopg2
 import json
 from datetime import datetime as dt
+import logging
 
 DEC2FLOAT = psycopg2.extensions.new_type(
             psycopg2.extensions.DECIMAL.values,
             'DEC2FLOAT',
             lambda value, curs: float(value) if value is not None else None)
-psycopg2.extensions.register_type(DEC2FLOAT)
+psycopg2.extensions.register_type(DEC2FLOAT)                                                        ##get values from database as float
 
-sensors = ["wind_speed", "wind_direction", "air_temperature", "air_relhumidity", "smp10", "pqsl", "soil_moisture", "soil_tempblue", "soil_tempred", "air_pressure", "precipitation"]
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s", handlers=[logging.FileHandler("server.log")])           ##configure logger
+sensors = ["wind_speed", "wind_direction", "air_temperature", "air_relhumidity", "smp10", "pqsl", "soil_moisture", "soil_tempblue", "soil_tempred", "air_pressure", "precipitation"]        ##sensors (collumns in database)
 sensordata_dic = {}
 datadict = {}
 urlfix = 'http://10.180.12.123:5000/'
 
+app = Flask(__name__)
 
 
+
+####################### Rotues ##########################
 @app.route('/index')
-def index():
-    title1 = ('home')
-    navhome = ('active')
-    liveurl = ('livedata/air_temperature')
-    return render_template('index_2.html',liveurl=liveurl, navhome=navhome, title1=title1)
-
-@app.route('/')
+@app.route('/')                                                                 ##route to homepage
 @app.route('/home', methods=['GET'])
 def home():
     liveurl = (urlfix + '_json?_home=home')
@@ -32,7 +31,7 @@ def home():
     return render_template('home.html', url=url, liveurl=liveurl)
 
 
-@app.route('/temperature')
+@app.route('/temperature')                                                      ##routes for website with link to data and informations for graph
 def temp():
     title = ('temperature')
     liveurl = (urlfix + '_livedata/air_temperature')
@@ -131,111 +130,80 @@ def precipitaion():
     return render_template('json_graph.html', navpre=navpre, liveurl=liveurl, url=url, chart=chart, var=var, title=title)
 
 
-@app.route('/json')
+@app.route('/json')                                                             ##route to json page
 def select_json():
     url = urlfix
     navjsn = ('active')
     return render_template('json.html', navjsn=navjsn, url=url)
 
 
-@app.route('/_livedata/<sensor>', methods=['GET'])
+@app.route('/_livedata/<sensor>', methods=['GET'])                              ##livedata for graph
 def livedata(sensor):
     sqls = create_sql_dat(sensor, 1)
     temp = read_db_sql(sqls)
-    sqlt = create_sql_dat("extract(epoch from created_at)", 1)
-    time = read_db_sql(sqlt)
+    sqlt = create_sql_dat("extract(epoch from created_at)", 1)                  ##create sql with requested sensor and time in eopch
+    time = read_db_sql(sqlt)                                                    ##get data from database
     temp1 = temp[0]
     temp2 = temp1[0]
     time1 = (time[0])
     time2 = time1[0]
     time3 = round(time2)
-    time4 = time3*1000
+    time4 = time3*1000                                                          ##format data for javascript
     result = [time4,temp2]
-    print("livedata: ", result)
-    return jsonify(result)
+    return jsonify(result)                                                      ##return data to website for ajax
 
 
-@app.route('/_multiple/<sensor>', methods=['GET'])
+@app.route('/_multiple/<sensor>', methods=['GET'])                              ##get data from database for graph
 def mult(sensor):
-    # print(values)
     li = []
     li2 = []
     li3 = []
     sql1 = "distinct on (date_trunc('hour', created_at)) " +sensor+ ", extract(epoch from created_at)"
     sql2 = "order by date_trunc('hour', created_at) desc limit 48;"
-
-    sqlt = create_sql_req(sql1, sql2)
-    print(sqlt)
+    sqlt = create_sql_req(sql1, sql2)                                           ##creeate sql to get one value of requested sensors per hour for the last 48 hours
     time = read_db_sql(sqlt)
-    print(time)
     for i in time:
         li.append(i[0])
         li2.append(i[1])
-    print("li:")
-    print(li)
-    print("li2")
-    print(li2)
+
     for i in range(len(li2)):
-        li3.append(round(int(li2[i]))*1000)
-
-
-    #print("li3: ")
-    #print(li3)
-
-    #timer = list(reversed(time))
-    #sqls = create_sql_dat(sensor, 30)
-    #temp = read_db_sql(sqls)
-    #temps = list(reversed(temp))
-
-    #for data in temps:
-        #li2.append(data[0])
-    # print("li2= ")
-    # print(li2)
-    #for data in timer:
-        #li.append(round(data[0])*1000)
-    # print("li= ")
-    # print(li)
+        li3.append(round(int(li2[i]))*1000)                                     ##format data for javascript
 
     return jsonify(list(zip(li3, li)))
 
 
-@app.route('/_json', methods=['GET'])
+@app.route('/_json', methods=['GET'])                                           ##route to provide raw json data for user
 def dictdate2():
-    # var2 = sensor
-    # var="wind_speed, air_temperature, air_relhumidity, wind_direction"
     var = "wind_speed, wind_direction, air_temperature, air_relhumidity, smp10, pqsl, soil_moisture, soil_tempblue, soil_tempred, air_pressure, precipitation, created_at"
 
     sq = ''
-    freq = request.args.get('freq')
+    freq = request.args.get('freq')                                             ##get user requests for date and frequency
     date = request.args.get('date')
-    home = request.args.get('_home')
+    home = request.args.get('_home')                                            ##request for data displayed on homepage
 
     if date:
-        if ":" in date:
+        if ":" in date:                                                         ##check if one or two dates are provided
             ls=date.split(":")
             fromd=create_dateform_req(ls[0])
-            till=create_dateform_req(ls[1])
+            till=create_dateform_req(ls[1])                                     ##if two dates are provided: split and format each one for sql query
             try:
-                if freq == 'hourly':
+                if freq == 'hourly':                                                            ##check requested frequency
                     var1 = "distinct on (date_trunc('hour', created_at)) " + var
                     date1="where created_at between symmetric '" +fromd+ "' and '" +till+ "' order by date_trunc('hour', created_at), created_at"
-                    # date2="' and '"+till+"' order by date_trunc('hour', created_at), created_at"
                 elif freq == 'all' or freq == None:
                     var1 = var
                     date1="where created_at between symmetric '" +fromd+ "' and '" +till+ "' order by created_at desc"
-                    # date2="' and '"+till+"' order by created_at desc"
                     freq = "all"
                 elif freq != None and freq != 'all' and freq != 'hourly':
                     return jsonify('check freq')
-                    # date3=date1+date2
 
             except:
                 return jsonify("date format error split")
             else:
-                sq=create_sql_req(var1, date1)
+                sq=create_sql_req(var1, date1)                                  ##create sql depending on provided informations
 
         else:
-            datens=create_dateform_req(date)
+            datens=create_dateform_req(date)                                    ##if only one date is provided: format for sql query and check requested frequency
             try:
                 if freq == 'hourly':
                     var1 = "distinct on (date_trunc('hour', created_at)) " + var
@@ -251,15 +219,13 @@ def dictdate2():
             except:
                 return jsonify("date format error")
             else:
-                sq=create_sql_req(var1, datestr)
+                sq=create_sql_req(var1, datestr)                                ##create sql depending on provided informations
 
     else:
         var1 = var
         date1 = "order by created_at desc limit 1;"
-        sq=create_sql_req(var1, date1)
+        sq=create_sql_req(var1, date1)                                          ##if no date is provided: create sql to get latest data on database
 
-    # print("sq: ")
-    # print(sq)
     lis1=[]
     lis2=[]
     lis3=[]
@@ -272,14 +238,12 @@ def dictdate2():
     lis10=[]
     lis11=[]
     lidate=[]
-    data1=read_db_sql(sq)
+    data1=read_db_sql(sq)                                                       ##send previously created sql to database and read response
     data=list(reversed(data1))
     sensordata_dic.clear()
     datadict.clear()
 
-    print("len data: ")
-    print(len(data))
-    for i in data:
+    for i in data:                                                              ##sort data from database
         lis1.append(i[0])
         lis2.append(i[1])
         lis3.append(i[2])
@@ -301,7 +265,7 @@ def dictdate2():
        # lidate.append(round(i[11].timestamp()))   ##time in epoch
 
 
-    for i in range(len(lis1)):
+    for i in range(len(lis1)):                                                  ##insert data into dictionary
         datadict["ws"]=lis1[i]
         datadict["wd"]=lis2[i]
         datadict["at"]=lis3[i]
@@ -316,7 +280,7 @@ def dictdate2():
         sensordata_dic[lidate[i]] = datadict.copy()
 
     if not sensordata_dic:
-        return jsonify("no data found")
+        return jsonify("no data found")                                         ##return error if there is no data for requested date
 
     units = {
     "wind speed": "m/s",
@@ -341,25 +305,25 @@ def dictdate2():
     }
 
     if home == 'home':
-        return jsonify(datadict)
+        return jsonify(datadict)                                                ##return requested data for homepage
 
     jsondict["main"] = sensordata_dic.copy()
-    return jsonify(jsondict)
+    return jsonify(jsondict)                                                    ##return json data to website
 
 
 
-@app.route('/_error')
+@app.route('/_error')                                                           ##route if database error occurs
 def error():
     return render_template('db_error.html')
 
 
-@app.errorhandler(404)
+@app.errorhandler(404)                                                          ##route if requested page not found
 def page_not_found(e):
    return render_template('404.html'), 404
 
 
 
-def create_dateform_req(date):
+def create_dateform_req(date):                                                  ##function to format date into right format for sql query
     dateform={"y":"%y",
         "m":"%y%m",
         "d":"%y%m%d"
@@ -371,50 +335,47 @@ def create_dateform_req(date):
     elif len(date)==2:
            dfomr=dateform["y"]
     else:
-           print(date)
-##           return ("check date format_split")
+           logging.info(date)
     try:
            daform=dt.strptime(date, dform)
            dform=dt.strftime(daform, "%Y%m%d")
     except:
-           print("split_datetime format error")
-##           return jsonify("check date format_split")
+           logging.info("split_datetime format error")
     else:
            return(dform)
 
 
-def create_sql_req(sensor, date3):
-##    yearsql="extract(year from created_at)={}".format(year)
-
+def create_sql_req(sensor, date3):                                              ##sql template
     sql = "select {} from sensordata {};".format(sensor, date3)
     return(sql)
 
-def create_sql_dat(sensor, limit):
+def create_sql_dat(sensor, limit):                                              ##sql template
     sql = "select {} from sensordata order by created_at desc limit {};".format(sensor, limit)
     return(sql)
 
-def read_db_sql(query):
+def read_db_sql(query):                                                         ##read data from datebase
         sql = query
-        print("sql: ")
-        print(sql)
         conn = None
         dt1 = []
-
         try:
             conn = psycopg2.connect(user = "pi",
                                     password = "pwd123",
                                     host = "10.180.12.123",
                                     port = "5432",
                                     database = "test")
-            cursor = conn.cursor()
-            cursor.execute(sql)
+            cursor = conn.cursor()                                              ##connect to database
+            cursor.execute(sql)                                                 ##execute sql query
             dt1 = cursor.fetchall()
             conn.commit()
             cursor.close()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
+            logging.info(error)
         finally:
             if conn is not None:
                 conn.close()
-            return dt1
+            return dt1                                                          ##return data to function
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')                                                     ##run flask app

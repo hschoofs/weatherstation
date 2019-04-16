@@ -49,7 +49,7 @@ function requestliveData() {
       success: function(point) {
 
           var series = chart.series[0],
-              shift = series.data.length > 30; // shift if the series is
+              shift = series.data.length > 30;
 
           chart.series[0].addPoint(point, true, shift);
 
