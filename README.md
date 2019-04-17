@@ -4,7 +4,7 @@ Datalogger and server for collecting data from a weatherstation.
 
 Logger: 
 A raspberry pi is used to get data from a Theodor Friedrichs Combilog datalogger.
-It is connected to the serial port of the combilog and communicates via asci telegrams.
+It is connected to the serial port of the combilog and communicates via ascii telegrams.
 After collecting, the data is sent to a local postgresql database.
 
 Server: 
