@@ -10,7 +10,7 @@ After collecting, the data is sent to a local postgresql database.
 Server: 
 A second raspberry pi is set up as a server, hosting the postgresql database and a flask web application. 
 The web apllication is used to display the data from the logger and to provide raw json data. 
-Highcharts is used to visualize the data (https://www.highcharts.com/).
+Highcharts is used to visualize the data. Highcharts (http://highcharts.com) is a Highsoft product which is not free for commercial and Governmental use.
 
 
 Please visit the Wiki for more detailled information.
