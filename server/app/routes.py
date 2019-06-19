@@ -11,7 +11,7 @@ DEC2FLOAT = psycopg2.extensions.new_type(
 psycopg2.extensions.register_type(DEC2FLOAT)                                                        ##get values from database as float
 
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s", handlers=[logging.FileHandler("server.log")])           ##configure logger
+logging.basicConfig(level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s", handlers=[logging.FileHandler("server.log"), logging.StreamHandler()])           ##configure logger
 sensors = ["wind_speed", "wind_direction", "air_temperature", "air_relhumidity", "smp10", "pqsl", "soil_moisture", "soil_tempblue", "soil_tempred", "air_pressure", "precipitation"]        ##sensors (collumns in database)
 sensordata_dic = {}
 datadict = {}
@@ -288,7 +288,7 @@ def dictdate2():
     "airtemp": "Celsius",
     "humidity": "%",
     "irradiance (GHI)": "W/m^2",
-    "irradiance (PAR)": "µmol/(s*m^2)",
+    "irradiance (PAR)": "umol/(s*m^2)",
     "soil moisture": "%",
     "soil_tempblue???": "C",
     "soil_tempred???": "C",
@@ -359,7 +359,7 @@ def read_db_sql(query):                                                         
         dt1 = []
         try:
             conn = psycopg2.connect(user = "pi",
-                                    password = "********",
+                                    password = "pwd123",
                                     host = "10.180.12.123",
                                     port = "5432",
                                     database = "test")
@@ -378,5 +378,5 @@ def read_db_sql(query):                                                         
 
 
 if __name__ == "__main__":
-    app.config['JSON_SORT_KEYS'] = False
+    # app.config['JSON_SORT_KEYS'] = False
     app.run(host='0.0.0.0')                                                     ##run flask app

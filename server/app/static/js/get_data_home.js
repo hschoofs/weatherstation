@@ -6,16 +6,16 @@ function requesthomeData() {    //get latest data from server
 
           var obj = point;                                                      //assign names and units to data
           console.log(point);
-          wind_speed="wind speed: "+obj.ws+"m/s";
-          temp="temperature: "+obj.at+"°C";
-          wind_direction="wind direction: "+obj.wd+"°";
-          air_relhumidity="humidity: "+obj.ar+"%";
-          air_pressure="air pressure: "+obj.ap+"hPa"
-          smp10="irradiance (GHI): "+obj.smp10+"W/m^2";
-          pqsl = "irradiance (PAR): "+obj.pqsl+"µmol/(s*m^2)";
-          soil_moisture = "soil moisture: "+obj.sm+"%";
-          soil_tempblue = "soil temperature: "+obj.stb+"°C";
-          precipitation = "precipitation: "+obj.pre+"mm";
+          wind_speed="wind speed: "+obj.wind_speed+"m/s";
+          temp="temperature: "+obj.airtemp+"°C";
+          wind_direction="wind direction: "+obj.wind_direction+"°";
+          air_relhumidity="humidity: "+obj.humidity+"%";
+          air_pressure="air pressure: "+obj.air_pressure+"hPa"
+          smp10="irradiance (GHI): "+obj.irradiance_ghi+"W/m^2";
+          pqsl = "irradiance (PAR): "+obj.irradiance_par+"µmol/(s*m^2)";
+          soil_moisture = "soil moisture: "+obj.soil_moisture+"%";
+          soil_tempblue = "soil temperature: "+obj.soil_tempblue+"°C";
+          precipitation = "precipitation: "+obj.precipitation+"mm";
 
 
           // console.log(typeof(air_relhumidty))
