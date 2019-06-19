@@ -266,17 +266,17 @@ def dictdate2():
 
 
     for i in range(len(lis1)):                                                  ##insert data into dictionary
-        datadict["ws"]=lis1[i]
-        datadict["wd"]=lis2[i]
-        datadict["at"]=lis3[i]
-        datadict["ar"]=lis4[i]
-        datadict["smp10"]=lis5[i]
-        datadict["pqsl"]=lis6[i]
-        datadict["sm"]=lis7[i]
-        datadict["stb"]=lis8[i]
-        datadict["str"]=lis9[i]
-        datadict["ap"]=lis10[i]
-        datadict["pre"]=lis11[i]
+        datadict["wind_speed"]=lis1[i]
+        datadict["wind_direction"]=lis2[i]
+        datadict["airtemp"]=lis3[i]
+        datadict["humidity"]=lis4[i]
+        datadict["irradiance_ghi"]=lis5[i]
+        datadict["irradiance_par"]=lis6[i]
+        datadict["soil_moisture"]=lis7[i]
+        datadict["soil_tempblue"]=lis8[i]
+        datadict["soil_tempred"]=lis9[i]
+        datadict["air_pressure"]=lis10[i]
+        datadict["precipitation"]=lis11[i]
         sensordata_dic[lidate[i]] = datadict.copy()
 
     if not sensordata_dic:
@@ -378,4 +378,5 @@ def read_db_sql(query):                                                         
 
 
 if __name__ == "__main__":
+    app.config['JSON_SORT_KEYS'] = False
     app.run(host='0.0.0.0')                                                     ##run flask app
