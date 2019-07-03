@@ -21,7 +21,7 @@ def insert_values(value):
         conn = None
         try:
             conn = psycopg2.connect(user = "pi",
-                                    password = "pwd123",
+                                    password = "********",
                                     host = "10.180.12.123",
                                     port = "5432",
                                     database = "test")
