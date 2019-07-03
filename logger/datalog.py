@@ -128,8 +128,6 @@ def reupload_data():
             if state is not 0:
                 insert_values(i)
                 counter += 1
-            else:
-                state = 1
         if counter > 1:
             not_uploaded.seek(0)
             for i in not_uploaded:
@@ -139,6 +137,7 @@ def reupload_data():
             logging.info("not_uploaded deleted")
         not_uploaded.close()
         not_uploaded_copy.close()
+        state = 1
     except:
         logging.info("error while reuploading")
         state = 1
