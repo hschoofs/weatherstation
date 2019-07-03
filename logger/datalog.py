@@ -6,7 +6,7 @@ import schedule
 from datetime import datetime as dt
 import logging
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s", handlers=[logging.FileHandler("combi.log"),logging.StreamHandler()])  #logger
+logging.basicConfig(level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s", handlers=[logging.FileHandler("combi.log")])  #logger (streamhandler: ,logging.StreamHandler())
 ser = serial.Serial('/dev/ttyACM0', baudrate=19200, timeout=1)      #serial configuration
 data = []
 # timer = 0
