@@ -147,20 +147,8 @@ def reupload_data():
 
 if __name__ == "__main__":
     schedule.every(10).seconds.do(channel)
-    schedule.every().week.do(run_threaded, reupload_data)
+    schedule.every().monday.do(run_threaded, reupload_data)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
-#
-# while True:
-#     try:
-#         channel()
-#         if timer == 8600:               #sync time every 8600 iterations ~ 24 hours
-#             sync_time()
-#             timer = 0
-#     except:
-#         logging.info("error funct. channel")
-#         time.sleep(50)                  #sleep if data cannot be read from datalogger
-#     finally:
-#         time.sleep(10)
