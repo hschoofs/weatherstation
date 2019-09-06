@@ -38,6 +38,7 @@ function requesthomeData() {    //get latest data from server
         console.log('failure');
     },
   });
+setTimeout(requesthomeData, 10000);
 }
 var url;
 requesthomeData();
