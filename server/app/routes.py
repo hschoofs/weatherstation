@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 
 
-####################### Rotues ##########################
+####################### Routes ##########################
 @app.route('/index')
 @app.route('/')                                                                 ##route to homepage
 @app.route('/home', methods=['GET'])
