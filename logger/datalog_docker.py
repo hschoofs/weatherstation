@@ -113,6 +113,8 @@ def sync_time():
     set_time = readdata(time_bytes)         #format time and synchronize with datalogger
     logging.info('time set to:')
     logging.info(tl)
+    
+    
 
 
 def channel():
@@ -133,8 +135,9 @@ def channel():
 
     time = dt.strptime(readtime, "%d%m%y%H%M%S")        #format time read from datalogger
     str_time = dt.strftime(time,  "%d%m%y %H%M%S")
+    sec_time = dt.datetime().timestamp()
 
-   # logging.info(str_time)
+   logging.info(str_time)
    # sync_time()
     
     data.append(wind_speed)
@@ -164,7 +167,7 @@ def channel():
                       'soil_tempred': soil_tempred,
                       'air_pressure': air_pressure,
                       'precipitation': precipitation,
-                      'created_at': str_time,
+                      'created_at': sec_time,
                       })
     
     
